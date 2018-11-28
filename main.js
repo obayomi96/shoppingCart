@@ -161,6 +161,7 @@ addToCartButtonsDOM.forEach(addToCartButtonDOM => {
                 cartItemDOM.classList.add('cart__item--removed');
                 setTimeout(() => cartItemDOM.remove(), 250);
                 cart = cart.filter(cartItem => cartItem.name !== product.name);
+                localStorage.setItem('cart', JSON.stringify(cart));
                 addToCartButtonDOM.innerText = 'Add To Cart';
                 addToCartButtonDOM.disabled = false;
               }
