@@ -2,14 +2,13 @@
 
 // Listening for clicks on each button
 
-let cart = let cart = (JSON.parse(localStorage.getItem('cart')) || []);;
+let cart = (JSON.parse(localStorage.getItem('cart')) || []);
 const cartDOM = document.querySelector('.cart');
 const addToCartButtonsDOM = document.querySelectorAll('[data-action="ADD_TO_CART"]');
 
 if (cart.length > 0) {
   cart.forEach(cartItem => {
     const product = cartItem;
-    
     insertItemToDOM(product);
     
     addToCartButtonsDOM.forEach(addToCartButtonDOM => {
@@ -72,9 +71,8 @@ function handleCartButton(addToCartButtonDOM, product) {
     cartItemsDOM.forEach(cartItemDOM => {
     if (cartItemDOM.querySelector('.cart__item__name').innerText === product.name) {
       cartItemDOM.querySelector('[data-action="INCREASE_ITEM"]').addEventListener('click', () => increaseItem(product, cartItemDOM));
-      cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').addEventListner('click', () => decreaseItem(product, cartItemDOM, addToCartButtonDOM));
-      cartItemDOM.querySelector('[data-action="REMOVE_ITEM"]').addEventListener('click', () => removeItem(product, addToCartButtonDOM));
-
+      cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').addEventListener('click', () => decreaseItem(product, cartItemDOM, addToCartButtonDOM));
+      cartItemDOM.querySelector('[data-action="REMOVE_ITEM"]').addEventListener('click', () => removeItem(product, cartItemDOM, addToCartButtonDOM));
     }
   });
 }
@@ -107,7 +105,6 @@ function decreaseItem(product, cartItemDOM, addToCartButtonDOM) {
 }
 
 function removeItem(product, cartItemDOM, addToCartButtonDOM) {
-      if (cartItem.name === product.name) {
         cartItemDOM.classList.add('cart__item--removed');
         setTimeout(() => cartItemDOM.remove(), 250);
         cart = cart.filter(cartItem => cartItem.name !== product.name);
