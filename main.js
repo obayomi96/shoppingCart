@@ -10,6 +10,7 @@ if (cart.length > 0) {
   cart.forEach(cartItem => {
     const product = cartItem;
     insertItemToDOM(product);
+    saveCart();
     
     addToCartButtonsDOM.forEach(addToCartButtonDOM => {
       const productDOM = addToCartButtonDOM.parentNode;
@@ -40,10 +41,13 @@ addToCartButtonsDOM.forEach(addToCartButtonDOM => {
       insertItemToDOM(product);    
       cart.push(product);
       localStorage.setItem('cart', JSON.stringify(cart));
+      saveCart();
       handleCartButton(addToCartButtonDOM, product);
     }
   });
 });
+
+// Inserting cart items and small buttons to the cart DOM
 
 function insertItemToDOM(product) {
     cartDOM.insertAdjacentHTML('beforeend', `
@@ -61,6 +65,8 @@ function insertItemToDOM(product) {
     addCartFooter();
 }
 
+// Cart buttons event handers
+
 function handleCartButton(addToCartButtonDOM, product) {
     addToCartButtonDOM.innerText = 'Added To Cart';
     addToCartButtonDOM.disabled = true;
@@ -77,15 +83,20 @@ function handleCartButton(addToCartButtonDOM, product) {
   });
 }
 
+// Increasing cart item quantity
+
 function increaseItem(product, cartItemDOM) {
     cart.forEach(cartItem => {
       if (cartItem.name === product.name) {
         cartItemDOM.querySelector('.cart__item__quantity').innerText = ++cartItem.quantity;
         cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').classList.remove('btn-danger');
         localStorage.setItem('cart', JSON.stringify(cart));
+        saveCart();
       }
     });
 }
+
+// Decreasing cart item quantity
 
 function decreaseItem(product, cartItemDOM, addToCartButtonDOM) {
     cart.forEach(cartItem => {
@@ -93,6 +104,7 @@ function decreaseItem(product, cartItemDOM, addToCartButtonDOM) {
       if(cartItem.quantity > 1) {
           cartItemDOM.querySelector('.cart__item__quantity').innerText = --cartItem.quantity;
           localStorage.setItem('cart', JSON.stringify(cart));
+          saveCart();
       } else {
           removeItem(product, cartItemDOM, addToCartButtonDOM);
       }
@@ -104,6 +116,8 @@ function decreaseItem(product, cartItemDOM, addToCartButtonDOM) {
     });
 }
 
+// Removing items from the cart
+
 function removeItem(product, cartItemDOM, addToCartButtonDOM) {
         cartItemDOM.classList.add('cart__item--removed');
         setTimeout(() => cartItemDOM.remove(), 250);
@@ -111,11 +125,13 @@ function removeItem(product, cartItemDOM, addToCartButtonDOM) {
         localStorage.setItem('cart', JSON.stringify(cart));
         addToCartButtonDOM.innerText = 'Add To Cart';
         addToCartButtonDOM.disabled = false;
-      }
+
       if(cart.length < 1){
           document.querySelector('.cart-footer').remove();
       }
 }
+
+// Add button to Clear the cart
 
 function addCartFooter(cartDOM){
     if(document.querySelector('.cart-footer') === null){
@@ -130,6 +146,8 @@ function addCartFooter(cartDOM){
     document.querySelector('[data-action="CHECkOUT"]').addEventListener('click', () => checkout());
     }    
 }
+
+// Clearing the cart event
 
 function clearCart() {
     cartDOM.querySelectorAll('.cart__item').forEach(cartItemDOM => {
@@ -148,5 +166,40 @@ function clearCart() {
 }
 
 function checkout() {
-    
+    let paypalFormHTML = `
+    <form id="paypal-form" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+        <input type="hidden" name="cmd" value="_cart">
+        <input type="hidden" name="upload" value="1">
+        <input type="hidden" name="business" value="martinsoluwaseun47@gmail.com">
+        `;
+        
+    cart.forEach((cartItem, index) => {
+        ++index;
+       paypalFormHTML += `
+        <input type="hidden" name="item_name_${index}" value="${cartItem.name}">
+        <input type="hidden" name="amount_${index}" value="${cartItem.price}">
+        <input type="hidden" name="quantity_${index}" value="${cartItem.quantity}">
+       `; 
+    });    
+        
+        paypalFormHTML += `
+        <input type="submit" value="PayPal">
+    </form>
+    <div class="overlay"></div>
+    `;
+    document.querySelector('body').insertAdjacentHTML('beforeend', paypalFormHTML);
+    document.getElementById('paypal-form').sumbit();
+}
+
+// Calculate total Payment and render to DOM pay button
+
+function countCartTotal() {
+    let cartTotal = 0;
+    cart.forEach(cartItem => cartTotal += cartItem.quantity * cartItem.price);
+    document.querySelector('[data-action="CHECKOUT"]').innerText = `Pay $${cartTotal}`;
+}
+
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    countCartTotal();
 }
