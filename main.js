@@ -165,6 +165,8 @@ function clearCart() {
     });
 }
 
+// Using Paypal API, add the paypal form attribute and insert it to the DOM
+
 function checkout() {
     let paypalFormHTML = `
     <form id="paypal-form" action="https://www.paypal.com/cgi-bin/webscr" method="post">
