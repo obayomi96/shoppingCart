@@ -133,7 +133,7 @@ function removeItem(product, cartItemDOM, addToCartButtonDOM) {
 
 // Add button to Clear the cart
 
-function addCartFooter(cartDOM){
+function addCartFooter(){
     if(document.querySelector('.cart-footer') === null){
         cartDOM.insertAdjacentHTML('afterend', `
         <div class="cart-footer">
