@@ -157,7 +157,7 @@ function clearCart() {
     
     cart = [];
     localStorage.removeItem('cart');
-    document.querySelector('cart-footer').remove();
+    document.querySelector('.cart-footer').remove();
     
     addToCartButtonsDOM.forEach(addToCartButtonDOM => {
         addToCartButtonDOM.innerText = 'Add To Cart';
