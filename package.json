@@ -1,0 +1,27 @@
+{
+  "name": "shoppingcart",
+  "version": "1.0.0",
+  "description": "es6 vanilla js shopping app",
+  "main": "server.js",
+  "engines": {
+    "node": "8.11.3",
+    "npm": "5.6.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/obayomi96/shoppingCart.git"
+  },
+  "author": "martins obayomi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/obayomi96/shoppingCart/issues"
+  },
+  "homepage": "https://github.com/obayomi96/shoppingCart#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  }
+}
